@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>ສຳລັບເຈົ້າ — ເລື່ອງຮັກຂອງເຮົາ</title>
+<meta name="description" content="Website for you KETSUDA" />
+<link rel="icon" type="image/png" href="assets/icons/favicon.png" />
+
+<!-- ============================================================
+     FONTS
+     SF Pro Display isn't publicly hosted, so we use the closest
+     free equivalents Apple-style sites commonly pair with it:
+     "Inter" / "Poppins" for UI text and "Great Vibes" (an elegant
+     script) for the handwritten love-letter feel.
+     Lao support: "Noto Serif Lao" (used for the love letter/quotes,
+     the closest thing to an elegant serif that fully covers Lao
+     script) and "Noto Sans Lao" (clean Lao body/UI text) are
+     included since the whole site is now in Lao. Browsers
+     automatically fall back to these for Lao characters while
+     still using the Latin fonts for any English/emoji left.
+     To swap fonts: change the links below AND the CSS variables
+     --font-display / --font-body / --font-script / --font-letter
+     in style.css
+============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Lao:wght@400;500;600;700&family=Noto+Sans+Lao:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+
+<!-- =========================================================
+     0. ACCESSIBILITY: skip link + aria-live region for status
+========================================================= -->
+<a class="skip-link" href="#main">ຂ້າມໄປທີ່ເນື້ອຫາ</a>
+<div id="aria-status" class="sr-only" aria-live="polite"></div>
+
+<!-- =========================================================
+     1. OPENING EXPERIENCE — black screen, click to begin
+========================================================= -->
+<section id="opening" class="scene" aria-label="ການເປີດ">
+  <div class="stars" id="stars"></div>
+  <div class="opening-glow"></div>
+
+  <div class="opening-content">
+    <p class="opening-message" id="openingMessage">ມີບາງຄົນກຽມບາງຢ່າງພິເສດໄວ້ໃຫ້ເຈົ້າ&hellip;</p>
+
+    <!-- Gift box (revealed after opening message) -->
+    <button type="button" id="giftBoxBtn" class="gift-box-wrap" aria-label="ເປີດຂອງຂວັນຂອງເຈົ້າ">
+      <div class="gift-box" id="giftBox">
+        <div class="gift-glow"></div>
+        <div class="gift-lid">
+          <div class="ribbon-v"></div>
+        </div>
+        <div class="gift-base">
+          <div class="ribbon-v"></div>
+          <div class="ribbon-h"></div>
+        </div>
+        <div class="ribbon-bow">
+          <span></span><span></span><i></i>
+        </div>
+      </div>
+      <p class="gift-hint">ແຕະເພື່ອເລີ່ມ</p>
+    </button>
+
+    <!-- Envelope (revealed after gift box opens) -->
+    <button type="button" id="envelopeBtn" class="envelope-wrap" aria-label="ເປີດຊອງຈົດໝາຍ" hidden>
+      <div class="envelope" id="envelope">
+        <div class="envelope-back"></div>
+        <div class="envelope-letter-peek"></div>
+        <div class="envelope-flap"></div>
+        <div class="wax-seal"><i class="fa-solid fa-heart"></i></div>
+      </div>
+      <p class="gift-hint">ແຕະເພື່ອເປີດ</p>
+    </button>
+  </div>
+
+  <div class="sparkle-layer" id="sparkleLayer"></div>
+</section>
+
+<!-- =========================================================
+     MAIN EXPERIENCE (hidden until envelope is opened)
+========================================================= -->
+<main id="main" hidden>
+
+  <!-- floating hearts / particles that run throughout the site -->
+  <div class="ambient-hearts" id="ambientHearts" aria-hidden="true"></div>
+
+  <!-- =======================================================
+       2. LOVE LETTER — typewriter effect
+  ======================================================== -->
+  <section id="letter" class="scene letter-scene" aria-label="ຈົດໝາຍວັນຄົບຮອບ">
+    <div class="letter-paper glass-panel">
+      <div class="letter-heading">
+        <span style="font-size: 1.5rem; letter-spacing: -1px;" class="eyebrow">ຈົດໝາຍໜຶ່ງສະບັບ, ສະເພາະສຳລັບເຈົ້າ</span>
+      </div>
+      <div class="letter-body">
+        <p id="typewriterText" class="typewriter" aria-live="polite"></p>
+        <span class="caret" aria-hidden="true"></span>
+      </div>
+      <button id="continueBtn" class="btn-glow" hidden>ສືບຕໍ່ເລື່ອງລາວຂອງເຮົາ <i class="fa-solid fa-arrow-down"></i></button>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       3. PHOTO MEMORIES — masonry gallery + lightbox
+  ======================================================== -->
+  <section id="memories" class="scene" aria-label="ຄວາມຊົງຈຳຮູບພາບ">
+    <header class="section-head" data-aos="fade-up">
+      <span class="eyebrow">ບົດທີໜຶ່ງ</span>
+      <h2>ທຸກໆຊ່ວງເວລາທີ່ມີຄ່າ</h2>
+      <p class="section-sub">ບາງພາບທີ່ຂ້ອຍມັກທີ່ສຸດຂອງເຈົ້າ</p>
+    </header>
+
+    <div class="masonry" id="masonryGrid">
+      <!-- populated by script.js from PHOTO_DATA -->
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="ໂຕສະແດງຮູບພາບ">
+    <button class="lightbox-close" id="lightboxClose" aria-label="ປິດໜ້າຕ່າງ"><i class="fa-solid fa-xmark"></i></button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="ຮູບກ່ອນໜ້າ"><i class="fa-solid fa-chevron-left"></i></button>
+    <figure class="lightbox-figure">
+      <img id="lightboxImg" src="" alt="" />
+      <figcaption id="lightboxCaption"></figcaption>
+    </figure>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="ຮູບຕໍ່ໄປ"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+
+  <!-- =======================================================
+       4. TIMELINE
+  ======================================================== -->
+  <section id="timeline" class="scene" aria-label="ໄທມ໌ໄລນ໌ຂອງເຮົາ">
+    <header class="section-head" data-aos="fade-up">
+      <span class="eyebrow">ບົດທີສອງ</span>
+      <h2>ເລື່ອງລາວຂອງເຮົາ, ຮອດຕອນນີ້</h2>
+      <p class="section-sub">ທຸກໆບົດນຳພາມາສູ່ບົດນີ້.</p>
+    </header>
+
+    <div class="timeline-track" id="timelineTrack">
+      <!-- populated by script.js from TIMELINE_DATA -->
+    </div>
+  </section>
+
+  <!-- =======================================================
+       5. LOVE COUNTER
+  ======================================================== -->
+  <section id="counter" class="scene counter-scene" aria-label="ເວລາທີ່ຢູ່ນຳກັນ">
+    <div class="counter-bg-glow"></div>
+    <header class="section-head" data-aos="fade-up">
+      <span class="eyebrow">ບົດທີສາມ</span>
+      <h2>ຢູ່ນຳກັນມາແລ້ວ</h2>
+    </header>
+
+    <div class="counter-grid glass-panel" id="counterGrid">
+      <div class="counter-unit">
+        <span class="counter-value" id="countDays">0</span>
+        <span class="counter-label">ມື້</span>
+      </div>
+      <div class="counter-unit">
+        <span class="counter-value" id="countHours">00</span>
+        <span class="counter-label">ຊົ່ວໂມງ</span>
+      </div>
+      <div class="counter-unit">
+        <span class="counter-value" id="countMinutes">00</span>
+        <span class="counter-label">ນາທີ</span>
+      </div>
+      <div class="counter-unit">
+        <span class="counter-value" id="countSeconds">00</span>
+        <span class="counter-label">ວິນາທີ</span>
+      </div>
+    </div>
+    <p class="counter-since" id="counterSince"></p>
+  </section>
+
+  <!-- =======================================================
+       6. REASONS I LOVE YOU — flip cards
+  ======================================================== -->
+  <section id="reasons" class="scene" aria-label="ເຫດຜົນທີ່ປື້ມໃນຕົວເຈົ້າ">
+    <header class="section-head" data-aos="fade-up">
+      <span class="eyebrow">ບົດທີສີ່</span>
+      <h2>ເຫດຜົນທີ່ຂ້ອຍປື້ມໃນຕົວເຈົ້າ</h2>
+      <p class="section-sub">ແຕະບັດເພື່ອເບິ່ງສິ່ງທີ່ຢູ່ຂ້າງໃນ.</p>
+    </header>
+
+    <div class="reasons-grid" id="reasonsGrid">
+      <!-- populated by script.js from REASONS_DATA -->
+    </div>
+  </section>
+
+  <!-- =======================================================
+       7. ROMANTIC QUOTES CAROUSEL
+  ======================================================== -->
+  <section id="quotes" class="scene quotes-scene" aria-label="ຄຳຄົມຄວາມຮັກ">
+    <div class="quotes-bg" id="quotesBg"></div>
+    <div class="quote-carousel glass-panel">
+      <i class="fa-solid fa-quote-left quote-mark"></i>
+      <p class="quote-text" id="quoteText"></p>
+      <p class="quote-author" id="quoteAuthor"></p>
+      <div class="quote-dots" id="quoteDots"></div>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       8. FIREWORKS FINALE
+  ======================================================== -->
+  <section id="finale" class="scene finale-scene" aria-label="ຕອນຈົບ">
+    <canvas id="fireworksCanvas"></canvas>
+    <div class="finale-heart-glow" id="finaleHeartGlow"></div>
+
+    <div class="finale-content">
+      <h2 class="finale-line" id="finaleLine1">ຍິນດີທີ່ໄດ້ຮູ້ຈັກ</h2>
+      <h2 class="finale-line" id="finaleLine2" hidden>ຈະບໍ່ມີຄຳຕະຫຼອດໄປ</h2>
+      <h2 class="finale-line" id="finaleLine3" hidden>ແຕ່ຈະເຮັດໃຫ້ອອກມາດີທີ່ສຸດທີ່ຕອນມີກັນ.</h2>
+
+      <div class="finale-answer" id="finaleAnswer" hidden>
+        <button class="btn-glow btn-yes" id="btnYes">ຫວັງດີສະເໝີ ແລະ ເລື່ອຍໆໄປ <i class="fa-solid fa-heart"></i></button>
+      </div>
+
+      <button class="btn-outline replay-btn" id="replayBtn">
+        <i class="fa-solid fa-rotate-right"></i> ເປີດບົດຄວາມຂອງຂ້ອຍອີກຄັ້ງ
+      </button>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+  <footer class="site-footer">
+    <p>ສ້າງດ້ວຍ <i class="fa-solid fa-heart"></i> ສະເພາະສຳລັບເຈົ້າ</p>
+  </footer>
+
+</main>
+
+<!-- =========================================================
+     FLOATING MUSIC PLAYER
+========================================================= -->
+<div class="music-player" id="musicPlayer" hidden>
+  <button class="music-toggle" id="musicToggle" aria-label="ຂະຫຍາຍໂຕຫຼິ້ນເພງ">
+    <img src="assets/images/real-1.jpg" alt="" class="music-cover" id="musicCoverMini" />
+    <span class="music-eq"><i></i><i></i><i></i></span>
+  </button>
+
+  <div class="music-panel" id="musicPanel">
+    <div class="music-panel-top">
+      <img src="assets/images/real-1.jpg" alt="ຮູບໜ້າປົກເພງ" class="music-cover-large" id="musicCoverLarge" />
+      <div class="music-meta">
+        <p class="music-title" id="musicTitle">เพลงรัก</p>
+        <p class="music-artist" id="musicArtist">Three Man Down</p>
+      </div>
+    </div>
+
+    <div class="music-progress-row">
+      <span class="music-time" id="musicCurrentTime">0:00</span>
+      <input type="range" id="musicSeek" class="music-seek" min="0" max="100" value="0" aria-label="ຄົ້ນຫາຕຳແໜ່ງເພງ">
+      <span class="music-time" id="musicDuration">0:00</span>
+    </div>
+
+    <div class="music-controls">
+      <button id="musicPrev" aria-label="ເພງກ່ອນໜ້າ"><i class="fa-solid fa-backward-step"></i></button>
+      <button id="musicPlayPause" class="music-play-btn" aria-label="ຫຼິ້ນ"><i class="fa-solid fa-play"></i></button>
+      <button id="musicNext" aria-label="ເພງຕໍ່ໄປ"><i class="fa-solid fa-forward-step"></i></button>
+    </div>
+
+    <div class="music-volume-row">
+      <i class="fa-solid fa-volume-low"></i>
+      <input type="range" id="musicVolume" class="music-volume" min="0" max="100" value="55" aria-label="ລະດັບສຽງ">
+    </div>
+
+    <ul class="music-playlist" id="musicPlaylist"></ul>
+  </div>
+</div>
+
+<audio id="audioEl" preload="auto" loop></audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="script.js">
+
+</script>
+</body>
+</html>
